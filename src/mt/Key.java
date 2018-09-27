@@ -1,8 +1,22 @@
+/*
+ * Copyright (c) Anton Kondrashkin 2018.
+ * This progect created by Anton Kondrashkin. You hardly know him, but he's a very cool guy
+ */
+
 package mt;
 
-public class Key{
+public class Key {
     private char symbol;
     private int state;
+    //Класс обозначает пару: символ алфавита и состояние. Используется для навигации по таблице алгоритма
+
+    @Override
+    public String toString() {
+        return "Key{" +
+                "symbol=" + symbol +
+                ", state=" + state +
+                '}';
+    }
 
     public boolean equals(Object object) {
         if (this == object) return true;

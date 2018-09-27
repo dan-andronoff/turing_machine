@@ -1,9 +1,15 @@
+/*
+ * Copyright (c) Anton Kondrashkin 2018.
+ * This progect created by Anton Kondrashkin. You hardly know him, but he's a very cool guy
+ */
+
 package mt;
 
-public class Instruction{
-    private char symbol;
-    private int state;
-    private char movement;
+public class Instruction {
+    // Тройка, обозначающая действие МТ
+    private char symbol;// какой символ писать
+    private int state;// в какой состояние перейти
+    private char movement;// в какую сторону сдвинуться
 
     @java.lang.Override
     public java.lang.String toString() {
