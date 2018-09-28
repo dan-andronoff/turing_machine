@@ -7,6 +7,7 @@ package mt;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -105,8 +106,21 @@ public class MT {
     }
 
     //Метод для добавления одной тройки алгоритма по состоянию и символу алфавита
-    public void addInstruction(Key key, Instruction value){
+    public void addInstruction(Key key, Instruction value) throws IllegalArgumentException{
+        if(!alphabet.contains(key.getSymbol()))
+            throw new IllegalArgumentException("Символ ключа отсутствует в алфавите");
+        if(key.getState() >=countOfStates || key.getState()==0)
+            throw new IllegalArgumentException("Используемое в ключе состояние отсутствует в списке состояний");
         alg.put(key,value);
+    }
+
+    //Метод для добавления одной тройки алгоритма по символу и состоянию
+    public void addInstruction(char symbol, int state, Instruction value) throws IllegalArgumentException{
+        if(!alphabet.contains(symbol))
+            throw new IllegalArgumentException("Символ ключа отсутствует в алфавите");
+        if(state >=countOfStates || state==0)
+            throw new IllegalArgumentException("Используемое в ключе состояние отсутствует в списке состояний");
+        alg.put(new Key(symbol, state),value);
     }
 
     //Получить инструкцию целиком на основе символа и состояния
@@ -172,6 +186,23 @@ public class MT {
         }
         fis.close();
         ois.close();
+    }
+
+    //Синтаксическая проверка алгоритма
+    public ArrayList<Instruction> syntaxCheck(){
+        ArrayList<Instruction> wrong = new ArrayList<>();
+        Collection<Instruction> instructions = alg.values();
+        for(Instruction i:instructions){
+            if(!alphabet.contains(i.getSymbol()) ||
+                    i.getState()>=countOfStates || i.getState()==0 ||
+                    (i.getMovement()!='r' && i.getMovement()!='l' && i.getMovement()!= 's'))
+                wrong.add(i);
+        }
+        if (wrong.size() == 0)
+            return null;
+
+        return wrong;
+
     }
 
 
