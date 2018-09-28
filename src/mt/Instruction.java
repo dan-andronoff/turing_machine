@@ -5,7 +5,9 @@
 
 package mt;
 
-public class Instruction {
+import java.io.Serializable;
+
+public class Instruction implements Serializable {
     // Тройка, обозначающая действие МТ
     private char symbol;// какой символ писать
     private int state;// в какой состояние перейти
@@ -23,7 +25,7 @@ public class Instruction {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
+        //if (!super.equals(object)) return false;
 
         Instruction that = (Instruction) object;
 
@@ -35,7 +37,7 @@ public class Instruction {
     }
 
     public int hashCode() {
-        int result = super.hashCode();
+        int result = this.getClass().hashCode();
         result = 31 * result + (int) symbol;
         result = 31 * result + state;
         result = 31 * result + (int) movement;

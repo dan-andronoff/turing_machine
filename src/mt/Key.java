@@ -5,7 +5,9 @@
 
 package mt;
 
-public class Key {
+import java.io.Serializable;
+
+public class Key implements Serializable {
     private char symbol;
     private int state;
     //Класс обозначает пару: символ алфавита и состояние. Используется для навигации по таблице алгоритма
@@ -21,7 +23,7 @@ public class Key {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        if (!super.equals(object)) return false;
+        //if (!super.equals(object)) return false;
 
         Key key = (Key) object;
 
@@ -32,7 +34,7 @@ public class Key {
     }
 
     public int hashCode() {
-        int result = super.hashCode();
+        int result = this.getClass().hashCode();
         result = 31 * result + (int) symbol;
         result = 31 * result + state;
         return result;
