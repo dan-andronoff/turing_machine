@@ -6,6 +6,7 @@
 package mt;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Key implements Serializable {
     private char symbol;
@@ -23,25 +24,17 @@ public class Key implements Serializable {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        //if (!super.equals(object)) return false;
 
         Key key = (Key) object;
 
-        if (symbol != key.symbol) return false;
-        if (state != key.state) return false;
-
-        return true;
+        return (symbol == key.symbol) && (state == key.state);
     }
 
     public int hashCode() {
-        int result = this.getClass().hashCode();
-        result = 31 * result + (int) symbol;
-        result = 31 * result + state;
-        return result;
+        return Objects.hash(symbol, state);
     }
 
     public char getSymbol() {
-
         return symbol;
     }
 

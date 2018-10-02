@@ -6,6 +6,7 @@
 package mt;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Instruction implements Serializable {
     // Тройка, обозначающая действие МТ
@@ -25,23 +26,14 @@ public class Instruction implements Serializable {
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        //if (!super.equals(object)) return false;
 
         Instruction that = (Instruction) object;
 
-        if (symbol != that.symbol) return false;
-        if (state != that.state) return false;
-        if (movement != that.movement) return false;
-
-        return true;
+        return (symbol == that.symbol)&& (state == that.state) && (movement == that.movement);
     }
 
     public int hashCode() {
-        int result = this.getClass().hashCode();
-        result = 31 * result + (int) symbol;
-        result = 31 * result + state;
-        result = 31 * result + (int) movement;
-        return result;
+        return Objects.hash(symbol, state, movement);
     }
 
     public char getSymbol() {
