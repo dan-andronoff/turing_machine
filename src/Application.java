@@ -10,7 +10,7 @@ public class Application extends javafx.application.Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/fxml/main_form.fxml"));
         Parent root = loader.load();
-        primaryStage.setTitle("Моделирование работы платной парковки");
+        primaryStage.setTitle("Моделирование работы Машины Тьюринга");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 

@@ -18,10 +18,11 @@ public class MT {
 
     private int pointer = 0; //указатель на текущий элемент в ленте
     private Key currentState;//текущиее состояние
-    private int countOfStates = 3;
+    private int countOfStates;
 
     // конструктор без параметров - для самого простого алгоритма с тремя символами
-    public MT(){
+    public MT(int countOfStates){
+        this.countOfStates = countOfStates;
         tape = new ArrayList<>();
         alphabet = new ArrayList<>();
 
@@ -29,7 +30,7 @@ public class MT {
         this.alphabet.add('*');
         this.alphabet.add(',');
 
-        this.alphabet.add(' ');
+        this.alphabet.add('_');
         pointer = 0;
         currentState = new Key('*',1);
         alg = new HashMap<>();
@@ -109,7 +110,7 @@ public class MT {
     public void addInstruction(Key key, Instruction value) throws IllegalArgumentException{
         if(!alphabet.contains(key.getSymbol()))
             throw new IllegalArgumentException("Символ ключа отсутствует в алфавите");
-        if(key.getState() >=countOfStates || key.getState()==0)
+        if(key.getState() > countOfStates || key.getState()==0)
             throw new IllegalArgumentException("Используемое в ключе состояние отсутствует в списке состояний");
         alg.put(key,value);
     }
