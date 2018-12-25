@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -15,9 +16,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="806.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainFormController">
    <children>
-      <BorderPane layoutX="192.0" layoutY="98.0" prefHeight="508.0" prefWidth="806.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane layoutX="192.0" layoutY="98.0" prefHeight="480.0" prefWidth="806.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
             <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
@@ -38,24 +39,24 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
-                                          <ImageView fitHeight="42.0" fitWidth="42.0" onMouseClicked="#deleteColumn" pickOnBounds="true" preserveRatio="true" GridPane.valignment="CENTER">
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#deleteColumn" pickOnBounds="true" preserveRatio="true" GridPane.valignment="CENTER">
                                              <image>
-                                                <Image url="@delete.jpg" />
+                                                <Image url="@delete.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="42.0" fitWidth="42.0" onMouseClicked="#insertColumnRight" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#insertColumnRight" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
                                              <image>
                                                 <Image url="@insert_right.jpg" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="42.0" fitWidth="42.0" onMouseClicked="#insertColumnLeft" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#insertColumnLeft" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" GridPane.valignment="CENTER">
                                              <image>
                                                 <Image url="@insert_left.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fitHeight="42.0" fitWidth="42.0" onMouseClicked="#clearCell" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#clearCell" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="3">
                                              <image>
-                                                <Image url="@lawn.png" />
+                                                <Image url="@clear.png" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -63,38 +64,59 @@
                                           <Insets left="5.0" />
                                        </BorderPane.margin>
                                        <padding>
-                                          <Insets bottom="100.0" top="15.0" />
+                                          <Insets bottom="170.0" top="15.0" />
                                        </padding>
                                     </GridPane>
                                  </left>
                                  <top>
                                     <GridPane BorderPane.alignment="CENTER">
                                       <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="132.0" minWidth="50.0" prefWidth="50.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="197.0" minWidth="50.0" prefWidth="50.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="197.0" minWidth="50.0" prefWidth="50.0" />
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="392.0" minWidth="10.0" prefWidth="353.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="236.0" minWidth="10.0" prefWidth="234.0" />
                                       </columnConstraints>
                                       <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <BorderPane.margin>
-                                          <Insets top="5.0" />
+                                          <Insets left="73.0" top="5.0" />
                                        </BorderPane.margin>
                                        <children>
-                                          <ImageView fitHeight="42.0" fitWidth="42.0" onMouseClicked="#saveAlg" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#saveAlg" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
                                              <image>
-                                                <Image url="@lawn.png" />
+                                                <Image url="@save.png" />
                                              </image>
                                           </ImageView>
-                                          <Button mnemonicParsing="false" onAction="#onChangeStateCount" prefHeight="31.0" prefWidth="151.0" text="Применить" GridPane.columnIndex="2" />
-                                          <ChoiceBox fx:id="stateCountChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" />
+                                          <Button mnemonicParsing="false" onAction="#onChangeStateCount" prefHeight="31.0" prefWidth="150.0" text="Применить" GridPane.columnIndex="4" GridPane.halignment="RIGHT">
+                                             <GridPane.margin>
+                                                <Insets right="50.0" />
+                                             </GridPane.margin></Button>
+                                          <ChoiceBox fx:id="stateCountChoiceBox" prefHeight="31.0" prefWidth="150.0" GridPane.columnIndex="3" GridPane.halignment="RIGHT">
+                                             <opaqueInsets>
+                                                <Insets left="8.0" />
+                                             </opaqueInsets></ChoiceBox>
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#loadAlg" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                                             <image>
+                                                <Image url="@load.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#setAlphabet" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+                                             <image>
+                                                <Image url="@settings.png" />
+                                             </image>
+                                          </ImageView>
                                        </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
                                     </GridPane>
                                  </top>
                                  <center>
                                     <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                        <center>
-                                          <Pane fx:id="mainPane" prefHeight="394.0" prefWidth="714.0" BorderPane.alignment="CENTER">
+                                          <Pane fx:id="constructionPane" prefHeight="394.0" prefWidth="714.0" BorderPane.alignment="CENTER">
                                              <BorderPane.margin>
                                                 <Insets left="15.0" right="15.0" top="15.0" />
                                              </BorderPane.margin>
@@ -120,7 +142,7 @@
                                                 </ChoiceBox>
                                                 <ChoiceBox fx:id="stateChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                                                 <ChoiceBox fx:id="movementChoiceBox" prefWidth="150.0" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                                                <Button mnemonicParsing="false" onAction="#onAddInstruction" prefHeight="31.0" prefWidth="151.0" text="Добавить" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.valignment="CENTER">
+                                                <Button mnemonicParsing="false" onAction="#onAddInstruction" prefHeight="31.0" prefWidth="150.0" text="Добавить" GridPane.columnIndex="3" GridPane.rowIndex="1" GridPane.valignment="CENTER">
                                                    <GridPane.margin>
                                                       <Insets />
                                                    </GridPane.margin>
@@ -143,7 +165,105 @@
                 </Tab>
                 <Tab text="Моделирование">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <BorderPane prefHeight="469.0" prefWidth="806.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <left>
+                                    <GridPane prefWidth="50.0" BorderPane.alignment="CENTER">
+                                       <columnConstraints>
+                                          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="50.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <children>
+                                          <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#startModeling" pickOnBounds="true" preserveRatio="true" GridPane.valignment="CENTER">
+                                             <image>
+                                                <Image url="@play.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fx:id="stopModeling" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#stopModeling" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="1">
+                                             <image>
+                                                <Image url="@stop.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ImageView fx:id="nextInstruction" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextInstruction" pickOnBounds="true" preserveRatio="true" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+                                             <image>
+                                                <Image url="@insert_right.jpg" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                       <BorderPane.margin>
+                                          <Insets left="5.0" />
+                                       </BorderPane.margin>
+                                       <padding>
+                                          <Insets bottom="170.0" top="15.0" />
+                                       </padding>
+                                    </GridPane>
+                                 </left>
+                                 <top>
+                                    <GridPane BorderPane.alignment="CENTER">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="50.0" minWidth="10.0" prefWidth="50.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="392.0" minWidth="10.0" prefWidth="26.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="323.0" minWidth="10.0" prefWidth="323.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="50.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                       <BorderPane.margin>
+                                          <Insets left="73.0" top="5.0" />
+                                       </BorderPane.margin>
+                                       <children>
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#loadAlgToModel" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
+                                             <image>
+                                                <Image url="@load.png" />
+                                             </image>
+                                          </ImageView>
+                                          <ChoiceBox prefWidth="150.0" GridPane.columnIndex="3" GridPane.halignment="RIGHT" />
+                                          <ChoiceBox prefWidth="150.0" GridPane.columnIndex="3" />
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#loadAlgToModel" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+                                             <image>
+                                                <Image url="@settings.png" />
+                                             </image>
+                                          </ImageView>
+                                          <CheckBox mnemonicParsing="false" text="Cохранить трассу" GridPane.columnIndex="2" GridPane.halignment="CENTER" />
+                                       </children>
+                                       <opaqueInsets>
+                                          <Insets />
+                                       </opaqueInsets>
+                                       <padding>
+                                          <Insets right="15.0" />
+                                       </padding>
+                                    </GridPane>
+                                 </top>
+                                 <center>
+                                    <BorderPane prefHeight="343.0" prefWidth="751.0" BorderPane.alignment="CENTER">
+                                       <center>
+                                          <Pane fx:id="modelPane" prefHeight="394.0" prefWidth="714.0" BorderPane.alignment="CENTER">
+                                             <BorderPane.margin>
+                                                <Insets left="15.0" right="15.0" top="15.0" />
+                                             </BorderPane.margin>
+                                          </Pane>
+                                       </center>
+                                       <bottom>
+                                          <Pane fx:id="tapePane" prefHeight="77.0" prefWidth="751.0" BorderPane.alignment="CENTER">
+                                             <padding>
+                                                <Insets bottom="50.0" right="50.0" />
+                                             </padding>
+                                             <BorderPane.margin>
+                                                <Insets bottom="15.0" left="15.0" right="15.0" />
+                                             </BorderPane.margin>
+                                          </Pane>
+                                       </bottom>
+                                    </BorderPane>
+                                 </center>
+                              </BorderPane>
+                           </children></AnchorPane>
                   </content>
                 </Tab>
               </tabs>

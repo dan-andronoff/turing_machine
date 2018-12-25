@@ -1,21 +1,29 @@
 package drawing;
 
 import javafx.scene.control.TextField;
+import mt.Instruction;
+import mt.Key;
+import mt.Movement;
 
 import java.util.Optional;
 
+import static drawing.DrawingConstants.CELL_WIDTH;
+
 public class TableCell extends TextField {
+
     private int i;
+    private Character[] alphabet;
     private int j;
 
     private Character symbol;
     private Integer state;
-    private Character movement;
+    private Movement movement;
 
-    public TableCell(int i, int j) {
+    public TableCell(int i, int j, Character[] alphabet) {
         super();
         this.i = i;
         this.j = j;
+        this.alphabet = alphabet;
     }
 
     public int getI() {
@@ -26,12 +34,14 @@ public class TableCell extends TextField {
         return j;
     }
 
-    public void setI(int i) {
-        this.i = i;
+    public void moveLeft() {
+        setLayoutX(getLayoutX() - CELL_WIDTH);
+        j--;
     }
 
-    public void setJ(int j) {
-        this.j = j;
+    public void moveRight() {
+        setLayoutX(getLayoutX() + CELL_WIDTH);
+        j++;
     }
 
     public Character getSymbol() {
@@ -50,12 +60,27 @@ public class TableCell extends TextField {
         this.state = state;
     }
 
-    public Character getMovement() {
+    public Movement getMovement() {
         return movement;
     }
 
-    public void setMovement(Character movement) {
+    public void setMovement(Movement movement) {
         this.movement = movement;
+    }
+
+    public void clear() {
+        symbol = null;
+        state = null;
+        movement = null;
+        setInstruction();
+    }
+
+    public Instruction getInstruction() {
+        return new Instruction(symbol, state, movement);
+    }
+
+    public Key getKey() {
+        return new Key(alphabet[i - 1], j);
     }
 
     public void setInstruction() {
@@ -68,10 +93,10 @@ public class TableCell extends TextField {
         super.setText(instruction.toString());
     }
 
-    public void clear(TableCell tableCell) {
-        symbol = null;
-        state = null;
-        movement = null;
+    public void setInstruction(Instruction instruction) {
+        symbol = instruction.getSymbol();
+        state = instruction.getState();
+        movement = instruction.getMovement();
         setInstruction();
     }
 }

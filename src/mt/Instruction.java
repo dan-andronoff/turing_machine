@@ -1,68 +1,62 @@
-/*
- * Copyright (c) Anton Kondrashkin 2018.
- * This progect created by Anton Kondrashkin. You hardly know him, but he's a very cool guy
- */
-
 package mt;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 public class Instruction implements Serializable {
-    // Тройка, обозначающая действие МТ
-    private char symbol;// какой символ писать
-    private int state;// в какой состояние перейти
-    private char movement;// в какую сторону сдвинуться
 
-    @java.lang.Override
-    public java.lang.String toString() {
-        return "Instruction{" +
-                "symbol=" + symbol +
-                ", state=" + state +
-                ", movement=" + movement +
-                '}';
+    private Character symbol;
+    private Integer state;
+    private Movement movement;
+
+    public Instruction(Character symbol, Integer state, Movement movement) {
+        this.symbol = symbol;
+        this.state = state;
+        this.movement = movement;
     }
 
+    public Character getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(Character symbol) {
+        this.symbol = symbol;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    public Movement getMovement() {
+        return movement;
+    }
+
+    public void setMovement(Movement movement) {
+        this.movement = movement;
+    }
+
+    @Override
+    public String toString() {
+        return symbol + " " + state + " " + movement;
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
 
-        Instruction that = (Instruction) object;
+        Instruction instruction = (Instruction) object;
 
-        return (symbol == that.symbol)&& (state == that.state) && (movement == that.movement);
+        return Objects.equals(symbol, instruction.symbol) && Objects.equals(state, instruction.getState())
+                && movement == instruction.movement;
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(symbol, state, movement);
-    }
-
-    public char getSymbol() {
-        return symbol;
-    }
-
-    public void setSymbol(char symbol) {
-        this.symbol = symbol;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
-    public char getMovement() {
-        return movement;
-    }
-
-    public void setMovement(char movement) {
-        this.movement = movement;
-    }
-
-    public Instruction(char symbol, int state, char movement) {
-        this.symbol = symbol;
-        this.state = state;
-        this.movement = movement;
     }
 }
