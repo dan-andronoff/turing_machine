@@ -47,7 +47,7 @@ public class ConstructorPaneUtils extends PaneUtils {
         stateCountChoiceBox.getItems().setAll(IntStream.rangeClosed(1, MAX_STATES).boxed().collect(Collectors.toList()));
         stateCountChoiceBox.getSelectionModel().select(stateCount - 1);
         alphabetChoiceBox.getItems().setAll(Arrays.asList(alphabet));
-        updateStateChoiceBox(stateCount);
+        updateNumericChoiceBox(stateChoiceBox, stateCount);
         movementChoiceBox.getItems().setAll(Movement.values());
 
         removeSelection();
@@ -136,10 +136,10 @@ public class ConstructorPaneUtils extends PaneUtils {
             }
             //remove cell selection
             symbols.get(selectedCell.getI()).setStyle(DEFAULT_STYLE);
-            removeSelection();
 
-            updateStateChoiceBox(--stateCount);
+            updateNumericChoiceBox(stateChoiceBox, --stateCount);
             updateCellsStatesAfterRemoving(selectedCell.getJ());
+            removeSelection();
         }
     }
 
@@ -180,7 +180,7 @@ public class ConstructorPaneUtils extends PaneUtils {
                 mainPane.getChildren().add(cell);
             }
 
-            updateStateChoiceBox(++stateCount);
+            updateNumericChoiceBox(stateCountChoiceBox, ++stateCount);
             updateCellsStatesAfterInserting(selectedCell.getJ());
         }
     }
@@ -222,7 +222,7 @@ public class ConstructorPaneUtils extends PaneUtils {
                 mainPane.getChildren().add(cell);
             }
 
-            updateStateChoiceBox(++stateCount);
+            updateNumericChoiceBox(stateCountChoiceBox, ++stateCount);
             updateCellsStatesAfterInserting(selectedCell.getJ() - 2);
         }
     }
@@ -262,10 +262,6 @@ public class ConstructorPaneUtils extends PaneUtils {
             Optional.ofNullable(tableCell.getMovement()).ifPresent(movementChoiceBox.getSelectionModel()::select);
             selectedCell = tableCell;
         };
-    }
-
-    private void updateStateChoiceBox(int stateCount) {
-        stateChoiceBox.getItems().setAll(IntStream.rangeClosed(1, stateCount).boxed().collect(Collectors.toList()));
     }
 
     private void updateCellsStatesAfterRemoving(int removedState) {
@@ -370,10 +366,8 @@ public class ConstructorPaneUtils extends PaneUtils {
     }
 
     private void removeSelection() {
-        Optional.ofNullable(selectedCell).ifPresent(selectedCell -> {
-            selectedCell.setStyle(DEFAULT_STYLE);
-            selectedCell = null;
-        });
+        Optional.ofNullable(selectedCell).ifPresent(selectedCell -> selectedCell.setStyle(DEFAULT_STYLE));
+        selectedCell = null;
         stateChoiceBox.getSelectionModel().clearSelection();
         alphabetChoiceBox.getSelectionModel().clearSelection();
         movementChoiceBox.getSelectionModel().clearSelection();

@@ -2,22 +2,20 @@ package utils;
 
 import drawing.TableCell;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import mt.MT;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static drawing.DrawingConstants.CELL_HEIGHT;
 import static drawing.DrawingConstants.CELL_WIDTH;
-import static drawing.DrawingConstants.DEFAULT_STYLE;
 
 public abstract class PaneUtils {
 
@@ -109,5 +107,9 @@ public abstract class PaneUtils {
         cells.clear();
         states.clear();
         symbols.clear();
+    }
+
+    protected void updateNumericChoiceBox(ChoiceBox<Integer> choiceBox, int maxValue) {
+        choiceBox.getItems().setAll(IntStream.rangeClosed(1, maxValue).boxed().collect(Collectors.toList()));
     }
 }

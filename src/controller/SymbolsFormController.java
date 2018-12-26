@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -7,7 +8,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import java.util.Arrays;
 
 public class SymbolsFormController {
 
@@ -31,6 +31,11 @@ public class SymbolsFormController {
     public void initialize() {
         alphabetSize.getItems().addAll(3, 4, 5);
         alphabetSize.setOnAction(disableTextField);
+        one.textProperty().addListener(getChangeSymbolListener(one));
+        eraser.textProperty().addListener(getChangeSymbolListener(eraser));
+        separator.textProperty().addListener(getChangeSymbolListener(separator));
+        firstAdditionSymbol.textProperty().addListener(getChangeSymbolListener(firstAdditionSymbol));
+        secondAdditionSymbol.textProperty().addListener(getChangeSymbolListener(secondAdditionSymbol));
     }
 
     public void setAlphabet(Character[] characters) {
@@ -41,8 +46,8 @@ public class SymbolsFormController {
             case 4:
                 firstAdditionSymbol.setText(characters[3].toString());
             case 3:
-                eraser.setText(characters[2].toString());
-                separator.setText(characters[1].toString());
+                separator.setText(characters[2].toString());
+                eraser.setText(characters[1].toString());
                 one.setText(characters[0].toString());
         }
     }
@@ -81,10 +86,13 @@ public class SymbolsFormController {
             case 3:
                 firstAdditionSymbol.setDisable(true);
                 secondAdditionSymbol.setDisable(true);
+                firstAdditionSymbol.clear();
+                secondAdditionSymbol.clear();
                 break;
             case 4:
                 firstAdditionSymbol.setDisable(false);
                 secondAdditionSymbol.setDisable(true);
+                secondAdditionSymbol.clear();
                 break;
             case 5:
                 firstAdditionSymbol.setDisable(false);
@@ -92,4 +100,14 @@ public class SymbolsFormController {
                 break;
         }
     };
+
+    private ChangeListener<String> getChangeSymbolListener(TextField field) {
+        return (o, oldValue, newValue) -> {
+            if (newValue.length() > 1) {
+                field.setText(oldValue);
+            } else {
+                field.setText(newValue);
+            }
+        };
+    }
 }

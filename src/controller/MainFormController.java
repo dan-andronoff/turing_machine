@@ -3,10 +3,17 @@ package controller;
 import static drawing.DrawingConstants.*;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import mt.DefaultAlgorithm;
 import mt.Movement;
 import utils.ConstructorPaneUtils;
 import utils.ModelPaneUtils;
@@ -21,7 +28,14 @@ public class MainFormController {
                 alphabetChoiceBox, stateChoiceBox, movementChoiceBox);
         constructorPaneUtils.setForm(INITIAL_ALPHABET, INITIAL_STATE_COUNT);
 
-        modelPaneUtils = new ModelPaneUtils(modelPane, tapePane, nextInstruction, stopModeling);
+        modelPaneUtils = new ModelPaneUtils(modelPane, tapePane, startModeling, nextInstruction, stopModeling,
+                operand1ChoiceBox, operand2ChoiceBox);
+
+        baseAlgorithmChoiceBox.getItems().addAll(DefaultAlgorithm.values());
+        baseAlgorithmChoiceBox.setOnAction(event -> {
+            modelPaneUtils.loadMT(baseAlgorithmChoiceBox.getSelectionModel().getSelectedItem().getMt());
+        });
+        baseAlgorithmChoiceBox.getSelectionModel().selectFirst();
     }
 
     //
@@ -114,11 +128,24 @@ public class MainFormController {
     private Pane tapePane;
 
     @FXML
+    private ImageView startModeling;
+    @FXML
     private ImageView nextInstruction;
     @FXML
     private ImageView stopModeling;
 
+    @FXML
+    private ChoiceBox<DefaultAlgorithm> baseAlgorithmChoiceBox;
+    @FXML
+    private CheckBox isSaveTape;
+    @FXML
+    private ChoiceBox<Integer> operand1ChoiceBox;
+    @FXML
+    private ChoiceBox<Integer> operand2ChoiceBox;
+
     private ModelPaneUtils modelPaneUtils;
+    private VisualizationMode visualizationMode = VisualizationMode.STEP_BY_STEP;
+    private Integer interval = 1;
 
     //Top menu panel
 
@@ -133,11 +160,79 @@ public class MainFormController {
         }
     }
 
+    @FXML
+    private void getVisualizationMode() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/model_settings_form.fxml"));
+            AnchorPane page = loader.load();
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Задать режим визуализации");
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.setResizable(false);
+            ModelSettingsFormController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setMode(visualizationMode);
+            controller.setInterval(interval);
+            dialogStage.showAndWait();
+
+            if (controller.isModeChosen()) {
+                visualizationMode = controller.getMode();
+                interval = controller.getInterval();
+                switch (visualizationMode) {
+                    case STEP_BY_STEP:
+                        stopModeling.setVisible(true);
+                        nextInstruction.setVisible(true);
+                        break;
+                    case NO_VISUALIZATION:
+                        stopModeling.setVisible(false);
+                        nextInstruction.setVisible(false);
+                        break;
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    private void saveTape() {
+        if (isSaveTape.isSelected()) {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Сохранение трассы:");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Текстовый файл", "*.txt"));
+            File file = fileChooser.showSaveDialog(null);
+            if (file != null) {
+                modelPaneUtils.setTapeFileName(file.getPath());
+            } else {
+                isSaveTape.setSelected(false);
+            }
+        } else {
+            modelPaneUtils.setTapeFileName(null);
+        }
+    }
+
     //Left menu panel
 
     @FXML
     private void startModeling() {
-        modelPaneUtils.start();
+        switch (visualizationMode) {
+            case STEP_BY_STEP:
+                modelPaneUtils.start();
+                break;
+            case TIMER:
+                modelPaneUtils.start();
+
+                break;
+            case NO_VISUALIZATION:
+                modelPaneUtils.start();
+                while (modelPaneUtils.next());
+                break;
+        }
+
     }
 
     @FXML

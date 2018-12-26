@@ -11,10 +11,14 @@ public class DrawingConstants {
     public static final int INITIAL_STATE_COUNT = 3;
     public static final Character[] INITIAL_ALPHABET = new Character[]{'*', ',', '_'};
 
-    public static final int TAPE_CELL_COUNT = 24;
-    public static final int TAPE_POINTER = 8;
+    public static final int TAPE_CELL_COUNT = 22;
+    public static final int TAPE_POINTER = 5;
     public static final int TAPE_CELL_SIZE = 30;
 
     public static final int MIN_STATES = 1;
     public static final int MAX_STATES = 10;
+
+    public static final int MAX_OPERAND_VALUE = 10;
+
+    public static final int MAX_ITERATIONS = 1000;
 }
