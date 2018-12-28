@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 import mt.MT;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -30,6 +31,18 @@ public abstract class PaneUtils {
 
     public PaneUtils(Pane mainPane) {
         this.mainPane = mainPane;
+    }
+
+    public Character[] getAlphabet() {
+        return alphabet;
+    }
+
+    public Integer getStateCount() {
+        return stateCount;
+    }
+
+    public List<TableCell> getCells() {
+        return cells;
     }
 
     public MT loadAlg(String fileName) {
@@ -59,12 +72,19 @@ public abstract class PaneUtils {
         mainPane.getChildren().add(header);
 
         //create alphabet column
-        for (int i = 1; i <= alphabet.length; i++) {
+        List<Character> uniqueSymbols = new ArrayList<>();
+        Arrays.stream(alphabet)
+                .forEach(s -> {
+                    if (!uniqueSymbols.contains(s)) {
+                        uniqueSymbols.add(s);
+                    }
+                });
+        for (int i = 1; i <= uniqueSymbols.size(); i++) {
             TextField cell = new TextField();
             cell.setPrefSize(CELL_WIDTH, CELL_HEIGHT);
             cell.setLayoutY(i * CELL_HEIGHT);
             cell.setLayoutX(0);
-            cell.setText(String.valueOf(alphabet[i - 1]));
+            cell.setText(String.valueOf(uniqueSymbols.get(i-1)));
             cell.setDisable(true);
             symbols.add(i, cell);
             mainPane.getChildren().add(cell);
@@ -83,9 +103,9 @@ public abstract class PaneUtils {
         }
 
         //create other cells
-        for (int i = 1; i <= alphabet.length; i++) {
+        for (int i = 1; i <= uniqueSymbols.size(); i++) {
             for (int j = 1; j <= stateCount; j++) {
-                TableCell cell = new TableCell(i, j, alphabet);
+                TableCell cell = new TableCell(i, j, uniqueSymbols.toArray(new Character[]{}));
                 cell.setPrefSize(CELL_WIDTH, CELL_HEIGHT);
                 cell.setLayoutY(i * CELL_HEIGHT);
                 cell.setLayoutX(j * CELL_WIDTH);

@@ -180,7 +180,7 @@ public class ConstructorPaneUtils extends PaneUtils {
                 mainPane.getChildren().add(cell);
             }
 
-            updateNumericChoiceBox(stateCountChoiceBox, ++stateCount);
+            updateNumericChoiceBox(stateChoiceBox, ++stateCount);
             updateCellsStatesAfterInserting(selectedCell.getJ());
         }
     }
@@ -222,7 +222,7 @@ public class ConstructorPaneUtils extends PaneUtils {
                 mainPane.getChildren().add(cell);
             }
 
-            updateNumericChoiceBox(stateCountChoiceBox, ++stateCount);
+            updateNumericChoiceBox(stateChoiceBox, ++stateCount);
             updateCellsStatesAfterInserting(selectedCell.getJ() - 2);
         }
     }

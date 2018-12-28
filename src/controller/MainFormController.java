@@ -2,11 +2,11 @@ package controller;
 
 import static drawing.DrawingConstants.*;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -14,13 +14,19 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import mt.DefaultAlgorithm;
+import mt.MT;
 import mt.Movement;
 import utils.ConstructorPaneUtils;
 import utils.ModelPaneUtils;
 
 import java.io.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainFormController {
+
+    @FXML
+    private TabPane tabPane;
 
     @FXML
     public void initialize() {
@@ -33,7 +39,9 @@ public class MainFormController {
 
         baseAlgorithmChoiceBox.getItems().addAll(DefaultAlgorithm.values());
         baseAlgorithmChoiceBox.setOnAction(event -> {
-            modelPaneUtils.loadMT(baseAlgorithmChoiceBox.getSelectionModel().getSelectedItem().getMt());
+            if (baseAlgorithmChoiceBox.getSelectionModel().getSelectedItem()!=null) {
+                modelPaneUtils.loadMT(baseAlgorithmChoiceBox.getSelectionModel().getSelectedItem().getMt());
+            }
         });
         baseAlgorithmChoiceBox.getSelectionModel().selectFirst();
     }
@@ -66,6 +74,7 @@ public class MainFormController {
     private void saveAlg() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Сохранение алгоритма:");
+        fileChooser.setInitialDirectory(new File(".."));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Файл алгоритма", "*.mt"));
         File file = fileChooser.showSaveDialog(null);
         if (file != null) {
@@ -77,6 +86,7 @@ public class MainFormController {
     private void loadAlg() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Загрузка алгоритма:");
+        fileChooser.setInitialDirectory(new File(".."));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Файл алгоритма", "*.mt"));
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
@@ -87,6 +97,18 @@ public class MainFormController {
     @FXML
     private void setAlphabet() {
         constructorPaneUtils.setAlphabet();
+    }
+
+    @FXML
+    private void goToModel() {
+        SingleSelectionModel<Tab> singleSelectionModel = tabPane.getSelectionModel();
+        singleSelectionModel.select(1);
+        MT mt = new MT(constructorPaneUtils.getAlphabet(), constructorPaneUtils.getStateCount());
+        constructorPaneUtils.getCells().stream()
+                .filter(cell -> cell.getState() != null || cell.getSymbol() != null || cell.getMovement() != null)
+                .forEach(cell -> mt.addInstruction(cell.getKey(), cell.getInstruction()));
+        modelPaneUtils.loadMT(mt);
+        baseAlgorithmChoiceBox.getSelectionModel().clearSelection();
     }
 
     //Left menu panel
@@ -147,16 +169,21 @@ public class MainFormController {
     private VisualizationMode visualizationMode = VisualizationMode.STEP_BY_STEP;
     private Integer interval = 1;
 
+    private Timer timer;
+    private TimerTask timerTask;
+
     //Top menu panel
 
     @FXML
     private void loadAlgToModel() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Загрузка алгоритма:");
+        fileChooser.setInitialDirectory(new File(".."));
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Файл алгоритма", "*.mt"));
         File file = fileChooser.showOpenDialog(null);
         if (file != null) {
            modelPaneUtils.loadAlg(file.getPath());
+            baseAlgorithmChoiceBox.getSelectionModel().clearSelection();
         }
     }
 
@@ -191,6 +218,9 @@ public class MainFormController {
                         stopModeling.setVisible(false);
                         nextInstruction.setVisible(false);
                         break;
+                    case TIMER:
+                        stopModeling.setVisible(true);
+                        nextInstruction.setVisible(false);
                 }
             }
         } catch (IOException e) {
@@ -203,6 +233,7 @@ public class MainFormController {
         if (isSaveTape.isSelected()) {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Сохранение трассы:");
+            fileChooser.setInitialDirectory(new File(".."));
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Текстовый файл", "*.txt"));
             File file = fileChooser.showSaveDialog(null);
             if (file != null) {
@@ -225,11 +256,18 @@ public class MainFormController {
                 break;
             case TIMER:
                 modelPaneUtils.start();
-
+                timerTask = createTask();
+                timer = new Timer();
+                timer.scheduleAtFixedRate(timerTask, 0, interval*200);
                 break;
             case NO_VISUALIZATION:
                 modelPaneUtils.start();
-                while (modelPaneUtils.next());
+                try {
+                    while (modelPaneUtils.next()) ;
+                    showAlert("Выполнение алгоритма успешно завершено.", Alert.AlertType.INFORMATION);
+                } catch (Exception e) {
+                    showAlert("Выполнение алгоритма завершено с ошибкой!", Alert.AlertType.ERROR);
+                }
                 break;
         }
 
@@ -237,11 +275,50 @@ public class MainFormController {
 
     @FXML
     private void stopModeling() {
+        if (timerTask != null) {
+            timer.cancel();
+            timerTask.cancel();
+        }
         modelPaneUtils.stop();
     }
 
     @FXML
     private void nextInstruction() {
-        modelPaneUtils.next();
+        try {
+            if (!modelPaneUtils.next()) {
+            showAlert("Выполнение алгоритма успешно завершено.", Alert.AlertType.INFORMATION);
+            }
+        } catch (Exception e) {
+            showAlert("Выполнение алгоритма завершено с ошибкой!", Alert.AlertType.ERROR);
+            e.printStackTrace();
+        }
+    }
+
+    private void showAlert(String text, Alert.AlertType type) {
+        Alert alert = new Alert(type);
+        alert.setTitle("");
+        alert.setHeaderText("");
+        alert.setContentText(text);
+        alert.showAndWait();
+    }
+
+    private TimerTask createTask() {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                Platform.runLater(() -> {
+                    try {
+                        if (!modelPaneUtils.next()) {
+                            timer.cancel();
+                            cancel();
+                            showAlert("Выполнение алгоритма успешно завершено.", Alert.AlertType.INFORMATION);
+                        }
+                    } catch (Exception e) {
+                        showAlert("Выполнение алгоритма завершено с ошибкой!", Alert.AlertType.ERROR);
+                        e.printStackTrace();
+                    }
+                });
+            }
+        };
     }
 }

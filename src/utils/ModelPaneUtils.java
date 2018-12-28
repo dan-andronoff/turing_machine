@@ -3,7 +3,6 @@ package utils;
 import drawing.TableCell;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -14,7 +13,6 @@ import mt.Key;
 import mt.MT;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,6 +37,8 @@ public class ModelPaneUtils extends PaneUtils {
 
     private BufferedWriter tapeFile;
     private String tapeFileName;
+
+    private int currentIteration = 0;
 
     public ModelPaneUtils(Pane mainPane, Pane tapePane, ImageView startModeling, ImageView nextInstruction, ImageView stopModeling,
                           ChoiceBox<Integer> operand1ChoiceBox, ChoiceBox<Integer> operand2ChoiceBox) {
@@ -137,6 +137,11 @@ public class ModelPaneUtils extends PaneUtils {
     }
 
     public boolean next() {
+        if (currentIteration > MAX_ITERATIONS) {
+            stop();
+            throw new IllegalArgumentException("Too much operations!");
+        }
+        currentIteration++;
         if (tapeFile!=null) {
             StringBuilder line = new StringBuilder();
             line.append('|');
@@ -144,6 +149,7 @@ public class ModelPaneUtils extends PaneUtils {
             try {
                 tapeFile.write(line.toString());
                 tapeFile.newLine();
+                tapeFile.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -179,7 +185,7 @@ public class ModelPaneUtils extends PaneUtils {
         }
 
         loadedMT.setPointer(0);
-        loadedMT.clearIteration();
+        currentIteration = 0;
         setTape();
         //updateTapeCells();
 

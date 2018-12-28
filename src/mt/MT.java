@@ -16,8 +16,6 @@ public class MT implements Serializable {
     private transient Integer currentState;
     private transient LinkedList<Character> tape = new LinkedList<>();
 
-    private int currentIteration = 0;
-
     public MT(Character[] alphabet, int countOfStates) {
         this.countOfStates = countOfStates;
         this.alphabet = Arrays.asList(alphabet);
@@ -81,10 +79,6 @@ public class MT implements Serializable {
     }
 
     public Key next() {
-        if (currentIteration > MAX_ITERATIONS) {
-            throw new IllegalArgumentException("Too much operations!");
-        }
-        currentIteration++;
         char currentSymbol = tape.get(pointer);
         Key currentKey = new Key(currentSymbol, currentState);
         Instruction instruction = alg.get(currentKey);
@@ -108,9 +102,5 @@ public class MT implements Serializable {
         }
         currentState = instruction.getState();
         return new Key(tape.get(pointer), currentState);
-    }
-
-    public void clearIteration() {
-        currentIteration = 0;
     }
 }
