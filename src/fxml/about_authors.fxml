@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="969.0" xmlns="http://javafx.com/javafx/8.0.181" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="71.0" layoutY="27.0" text="Разработчики проекта: &quot;Моделирование  работы Машины Тьюринга&quot;">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Label layoutX="129.0" layoutY="79.0" text="Андронов Даниил">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <Label layoutX="589.0" layoutY="79.0" text="Кондрашкин Антон">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="285.0" fitWidth="389.0" layoutX="55.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@danil.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="362.0" fitWidth="427.0" layoutX="491.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@anton.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="181.0" layoutY="445.0" prefHeight="47.0" prefWidth="662.0" text="Научный руководитель: Зеленко Лариса Сергеевна, ">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="435.0" layoutY="861.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="181.0" layoutY="478.0" prefHeight="47.0" prefWidth="632.0" text="доцент кафедры программных систем">
+         <font>
+            <Font size="26.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

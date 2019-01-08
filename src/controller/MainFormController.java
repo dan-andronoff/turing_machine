@@ -46,6 +46,39 @@ public class MainFormController {
         baseAlgorithmChoiceBox.getSelectionModel().selectFirst();
     }
 
+    @FXML
+    public void onAuthorsClick(){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/about_authors.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Об авторах");
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            dialogStage.setResizable(false);
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void onProjectClick(){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/about_project.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("О системе");
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            dialogStage.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     //
     //Constructor Tab
     //
@@ -264,7 +297,7 @@ public class MainFormController {
                 modelPaneUtils.start();
                 try {
                     while (modelPaneUtils.next()) ;
-                    showAlert("Выполнение алгоритма успешно завершено.", Alert.AlertType.INFORMATION);
+                    showAlert("Выполнение алгоритма успешно завершено. Результат работы = " + getResult(), Alert.AlertType.INFORMATION);
                 } catch (Exception e) {
                     showAlert("Выполнение алгоритма завершено с ошибкой!", Alert.AlertType.ERROR);
                 }
@@ -286,7 +319,7 @@ public class MainFormController {
     private void nextInstruction() {
         try {
             if (!modelPaneUtils.next()) {
-            showAlert("Выполнение алгоритма успешно завершено.", Alert.AlertType.INFORMATION);
+            showAlert("Выполнение алгоритма успешно завершено. Результат работы = " + getResult(), Alert.AlertType.INFORMATION);
             }
         } catch (Exception e) {
             showAlert("Выполнение алгоритма завершено с ошибкой!", Alert.AlertType.ERROR);
@@ -311,7 +344,7 @@ public class MainFormController {
                         if (!modelPaneUtils.next()) {
                             timer.cancel();
                             cancel();
-                            showAlert("Выполнение алгоритма успешно завершено.", Alert.AlertType.INFORMATION);
+                            showAlert("Выполнение алгоритма успешно завершено. Результат работы = " + getResult(), Alert.AlertType.INFORMATION);
                         }
                     } catch (Exception e) {
                         showAlert("Выполнение алгоритма завершено с ошибкой!", Alert.AlertType.ERROR);
@@ -320,5 +353,12 @@ public class MainFormController {
                 });
             }
         };
+    }
+
+    private long getResult() {
+        return modelPaneUtils.getLoadedMT().getTape()
+                .stream()
+                .filter(ch -> modelPaneUtils.getLoadedMT().getAlphabet()[0].equals(ch))
+                .count();
     }
 }

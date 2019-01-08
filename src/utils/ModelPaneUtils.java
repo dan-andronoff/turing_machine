@@ -3,12 +3,17 @@ package utils;
 import drawing.TableCell;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import mt.Key;
 import mt.MT;
 
@@ -31,8 +36,10 @@ public class ModelPaneUtils extends PaneUtils {
     private ChoiceBox<Integer> operand2ChoiceBox;
 
     private List<TextField> tape = new ArrayList<>();
+    private List<Label> labels = new ArrayList<>();
     private TableCell currentCell;
     private TextField currentState;
+    private int currentPointer;
     private MT loadedMT;
 
     private BufferedWriter tapeFile;
@@ -65,6 +72,10 @@ public class ModelPaneUtils extends PaneUtils {
         this.tapeFileName = tapeFileName;
     }
 
+    public MT getLoadedMT() {
+        return loadedMT;
+    }
+
     @Override
     public void setForm(Character[] alphabet, int stateCount) {
         this.stateCount = stateCount;
@@ -88,7 +99,7 @@ public class ModelPaneUtils extends PaneUtils {
         alphabet = loadedMT.getAlphabet();
         clearTable();
         setTape();
-        updateTapeCells();
+        updateTapeCells(TAPE_POINTER);
         setForm(mt.getAlphabet(), mt.getCountOfStates());
         mt.getAlg().forEach((key, instruction) -> {
             cells.stream()
@@ -126,7 +137,8 @@ public class ModelPaneUtils extends PaneUtils {
         loadedMT.setCurrentState(Integer.valueOf(currentState.getText()));
 
         setTape();
-        updateTapeCells();
+        updateTapeCells(TAPE_POINTER);
+        currentPointer = TAPE_POINTER;
         if (tapeFileName != null) {
             try {
                 tapeFile = new BufferedWriter(new FileWriter(tapeFileName));
@@ -163,7 +175,8 @@ public class ModelPaneUtils extends PaneUtils {
                     cell.setStyle(SELECTED_HEADER_STYLE);
                     currentCell = cell;
                 });
-        updateTapeCells();
+        updateTapeCells(TAPE_POINTER);
+        currentPointer = 0;
         if (loadedMT.getAlg().containsKey(currentKey)) {
             return true;
         } else {
@@ -186,7 +199,8 @@ public class ModelPaneUtils extends PaneUtils {
 
         loadedMT.setPointer(0);
         currentIteration = 0;
-        setTape();
+        currentPointer = TAPE_POINTER;
+        //setTape();
         //updateTapeCells();
 
         if (tapeFileName != null) {
@@ -204,27 +218,70 @@ public class ModelPaneUtils extends PaneUtils {
     }
 
     private void createTapeCells() {
+        Button left = new Button();
+        left.setPrefSize(TAPE_CELL_SIZE, TAPE_CELL_SIZE);
+        left.setLayoutX(0);
+        left.setLayoutY(0);
+        left.setText("<");
+        left.setFont(new Font(12));
+        left.setAlignment(Pos.CENTER);
+        left.setOnAction(event -> {
+            int index = TAPE_CELL_COUNT - 1 + loadedMT.getPointer() - currentPointer;
+            if (index - 5 >= 0) {
+                currentPointer += 5;
+                updateTapeCells(currentPointer);
+            }
+        });
+        tapePane.getChildren().add(left);
+
         for (int i = 0; i < TAPE_CELL_COUNT; i++) {
             TextField tapeCell = new TextField();
             tapeCell.setPrefSize(TAPE_CELL_SIZE, TAPE_CELL_SIZE);
-            tapeCell.setLayoutX(i * TAPE_CELL_SIZE);
+            tapeCell.setLayoutX(TAPE_CELL_SIZE + i * TAPE_CELL_SIZE);
             tapeCell.setLayoutY(0);
             tapeCell.setEditable(false);
             tapeCell.setCursor(Cursor.HAND);
+            tapeCell.setAlignment(Pos.CENTER);
             tape.add(tapeCell);
             tapePane.getChildren().add(tapeCell);
+
+            Label label = new Label();
+            label.setPrefWidth(TAPE_CELL_SIZE);
+            label.setLayoutX(TAPE_CELL_SIZE + i * TAPE_CELL_SIZE);
+            label.setLayoutY(TAPE_CELL_SIZE * 1.2);
+            label.setAlignment(Pos.CENTER);
+            labels.add(label);
+            tapePane.getChildren().add(label);
         }
         tape.get(TAPE_POINTER).setStyle(SELECTED_HEADER_STYLE);
+
+        Button right = new Button();
+        right.setPrefSize(TAPE_CELL_SIZE, TAPE_CELL_SIZE);
+        right.setLayoutX((TAPE_CELL_COUNT + 1) * TAPE_CELL_SIZE);
+        right.setLayoutY(0);
+        right.setText(">");
+        right.setFont(new Font(12));
+        right.setAlignment(Pos.CENTER);
+        right.setOnAction(event -> {
+            int index = loadedMT.getPointer() - currentPointer;
+            if (index + 5 < loadedMT.getTape().size()) {
+                currentPointer -= 5;
+                updateTapeCells(currentPointer);
+            }
+        });
+        tapePane.getChildren().add(right);
     }
 
-    private void updateTapeCells() {
+    private void updateTapeCells(Integer pointer) {
         List<Character> tape = loadedMT.getTape();
         for (int i = 0; i < TAPE_CELL_COUNT; i++) {
-            int index = i + loadedMT.getPointer() - TAPE_POINTER;
+            int index = i + loadedMT.getPointer() - pointer;
             if (index >= 0 && index < tape.size()) {
                 this.tape.get(i).setText(tape.get(index).toString());
+                this.labels.get(i).setText(String.valueOf(index));
             } else {
                 this.tape.get(i).setText(alphabet[1].toString());
+                this.labels.get(i).setText("");
             }
         }
     }
@@ -253,7 +310,8 @@ public class ModelPaneUtils extends PaneUtils {
     private EventHandler<ActionEvent> updateOperand = event -> {
         if (loadedMT != null) {
             setTape();
-            updateTapeCells();
+            updateTapeCells(TAPE_POINTER);
+            currentPointer = TAPE_POINTER;
         }
     };
 }
